@@ -1,13 +1,14 @@
 extends Node2D
 
 @onready var path_2d: Path2D = $Path2D
-@onready var factory: Sprite2D = $Factory
+@onready var factory: Factory = $Factory
 @onready var tile_map_layer: TileMapLayer = $TileMapLayer
 @onready var placement_indicator: Sprite2D = $PlacementIndicator
 @onready var switch_state: Button = $UI/HBoxContainer/SwitchState
 @onready var add_button: Button = $UI/HBoxContainer/Add
 @onready var erase_button: Button = $UI/HBoxContainer/Erase
 @onready var h_box_container: HBoxContainer = $UI/HBoxContainer
+
 
 enum ORIENTATION {
 	WE,
@@ -92,6 +93,10 @@ func _ready() -> void:
 		child.connect("mouse_exited", func():
 			canplace = true
 		)
+	factory.connect("start_train", func(available : int):
+		var taken := train.leave_factory(available)
+		factory.storage -= taken
+	)
 	
 	setup_train()
 	setup_clients()

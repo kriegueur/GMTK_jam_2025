@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://jsw8v313wdip"]
+
+[ext_resource type="Texture2D" uid="uid://dp7gt0ra56uqo" path="res://assets/icon.svg" id="1_r3gb1"]
+[ext_resource type="Script" uid="uid://cws63dnsuvg7c" path="res://scripts/factory.gd" id="2_lmr8u"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r3gb1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lmr8u"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="Factory" type="Sprite2D"]
+self_modulate = Color(0, 0, 0, 1)
+texture_filter = 1
+scale = Vector2(0.5, 0.3)
+texture = ExtResource("1_r3gb1")
+script = ExtResource("2_lmr8u")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -139.0
+offset_top = -58.0
+offset_right = 11.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_r3gb1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_lmr8u")
+show_percentage = false
+
+[node name="Button" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -118.0
+offset_top = -8.0
+offset_right = -10.0
+offset_bottom = 23.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "START TRAIN"

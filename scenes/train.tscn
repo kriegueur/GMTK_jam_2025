@@ -19,3 +19,6 @@ texture = ExtResource("2_6b7q7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TrainBody"]
 shape = SubResource("RectangleShape2D_muh0j")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
