@@ -4,6 +4,10 @@ extends Node2D
 @onready var factory: Sprite2D = $Factory
 @onready var tile_map_layer: TileMapLayer = $TileMapLayer
 @onready var placement_indicator: Sprite2D = $PlacementIndicator
+@onready var switch_state: Button = $UI/HBoxContainer/SwitchState
+@onready var add_button: Button = $UI/HBoxContainer/Add
+@onready var erase_button: Button = $UI/HBoxContainer/Erase
+@onready var h_box_container: HBoxContainer = $UI/HBoxContainer
 
 enum ORIENTATION {
 	WE,
@@ -21,20 +25,82 @@ enum ADJACENTPOS {
 	RIGHT,
 }
 
+enum GAMESTATE {
+	PLAYING,
+	EDITING,
+}
+
+enum EDITSTATE {
+	RAIL,
+	ERASE
+}
+
+var state := GAMESTATE.PLAYING
+var editstate := EDITSTATE.RAIL
+var canplace := true
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var path = find_railpath()
 	path_2d.curve = _curve2d_from_path(path)
+	switch_state.connect("pressed", func():
+		if state == GAMESTATE.PLAYING:
+			state = GAMESTATE.EDITING
+			switch_state.text = "PLAY"
+			if editstate == EDITSTATE.RAIL:
+				placement_indicator.show()
+				add_button.disabled = true
+				erase_button.disabled = false
+			elif editstate == EDITSTATE.ERASE:
+				add_button.disabled = false
+				erase_button.disabled = true
+			add_button.show()
+			erase_button.show()
+		elif state == GAMESTATE.EDITING:
+			path = find_railpath()
+			if path.is_empty():
+				return
+			path_2d.curve = _curve2d_from_path(path)
+			state = GAMESTATE.PLAYING
+			switch_state.text = "EDIT RAILS"
+			placement_indicator.hide()
+			add_button.hide()
+			erase_button.hide()
+	)
+	add_button.connect("pressed", func():
+		editstate = EDITSTATE.RAIL
+		add_button.disabled = true
+		erase_button.disabled = false
+		placement_indicator.show()
+	)
+	erase_button.connect("pressed", func():
+		editstate = EDITSTATE.ERASE
+		add_button.disabled = false
+		erase_button.disabled = true
+		placement_indicator.hide()
+	)
+	for child in h_box_container.get_children():
+		child.connect("mouse_entered", func():
+			canplace = false
+		)
+		child.connect("mouse_exited", func():
+			canplace = true
+		)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	var mouse_position := get_global_mouse_position()
-	var cursor_tile := tile_map_layer.local_to_map(to_local(mouse_position))
-	var cursor_tile_center := tile_map_layer.map_to_local(cursor_tile)
-	placement_indicator.global_position = cursor_tile_center
-	if Input.is_action_pressed("click"):
-		if tile_empty(cursor_tile):
-			place_rail(cursor_tile)
+	if state == GAMESTATE.EDITING:
+		var mouse_position := get_global_mouse_position()
+		var cursor_tile := tile_map_layer.local_to_map(to_local(mouse_position))
+		var cursor_tile_center := tile_map_layer.map_to_local(cursor_tile)
+		placement_indicator.global_position = cursor_tile_center
+		if Input.is_action_pressed("click"):
+			if editstate == EDITSTATE.RAIL:
+				if can_place_rail(cursor_tile):
+					place_rail(cursor_tile)
+			elif editstate == EDITSTATE.ERASE:
+				if can_erase_rail(cursor_tile):
+					erase_rail(cursor_tile)
 
 func get_tile_center_from_pos(pos : Vector2) -> Vector2:
 	var a = tile_map_layer.local_to_map(pos)
@@ -50,7 +116,7 @@ func find_railpath() -> Array[Vector2i]:
 		next = get_adjacent_railtile(current, prev)
 		if next == current:
 			print("Failed to find path")
-			break
+			return []
 		tiles.append(current)
 		if current != starting_tile:
 			prev.append(current)
@@ -59,7 +125,10 @@ func find_railpath() -> Array[Vector2i]:
 	return tiles
 
 func get_adjacent_railtile(tile : Vector2i, previous_tiles : Array[Vector2i]) -> Vector2i:
-	var current_tile_type : String = tile_map_layer.get_cell_tile_data(tile).get_custom_data("Orientation")
+	var current_tile_data := tile_map_layer.get_cell_tile_data(tile)
+	if current_tile_data == null:
+		return tile
+	var current_tile_type : String = current_tile_data.get_custom_data("Orientation")
 	match current_tile_type:
 		"WE":
 			return _unexplored_tile(tile, previous_tiles, Vector2i.RIGHT, Vector2i.LEFT)
@@ -109,6 +178,13 @@ func place_rail(tile : Vector2i):
 	var orientation := find_rail_orientation(tile)
 	var atlas_coords := orientation_to_atlas(orientation)
 	tile_map_layer.set_cell(tile, 0, atlas_coords)
+	update_tile(tile + Vector2i.UP)
+	update_tile(tile + Vector2i.DOWN)
+	update_tile(tile + Vector2i.LEFT)
+	update_tile(tile + Vector2i.RIGHT)
+
+func erase_rail(tile : Vector2i):
+	tile_map_layer.set_cell(tile)
 	update_tile(tile + Vector2i.UP)
 	update_tile(tile + Vector2i.DOWN)
 	update_tile(tile + Vector2i.LEFT)
@@ -222,3 +298,9 @@ func get_tile_orientation(tile : Vector2i) -> ORIENTATION:
 			return ORIENTATION.SE
 		_:
 			return ORIENTATION.NS
+
+func can_place_rail(tile : Vector2i) -> bool:
+	return tile_empty(tile) and canplace
+
+func can_erase_rail(tile : Vector2i) -> bool:
+	return !tile_empty(tile)

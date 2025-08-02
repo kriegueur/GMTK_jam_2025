@@ -94,6 +94,35 @@ texture = ExtResource("3_tlwt5")
 position = Vector2(1, 0)
 
 [node name="PlacementIndicator" type="Sprite2D" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0.541176)
 z_index = 5
 texture = SubResource("AtlasTexture_tlwt5")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -45.0
+offset_top = -40.0
+offset_right = 45.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="SwitchState" type="Button" parent="UI/HBoxContainer"]
+layout_mode = 2
+text = "EDIT RAILS"
+
+[node name="Add" type="Button" parent="UI/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "ADD"
+
+[node name="Erase" type="Button" parent="UI/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "ERASE"
