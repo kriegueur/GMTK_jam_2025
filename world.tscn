@@ -1,8 +1,8 @@
-[gd_scene load_steps=6 format=4 uid="uid://1wl7iiad1nhn"]
+[gd_scene load_steps=7 format=4 uid="uid://1wl7iiad1nhn"]
 
 [ext_resource type="Texture2D" uid="uid://c4bxeg3u7sjpi" path="res://rails.png" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://b82hcokisgbkl" path="res://world.gd" id="1_fj7yv"]
-[ext_resource type="Texture2D" uid="uid://dp7gt0ra56uqo" path="res://icon.svg" id="3_tlwt5"]
+[ext_resource type="Texture2D" uid="uid://dp7gt0ra56uqo" path="res://assets/icon.svg" id="3_tlwt5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fj7yv"]
 texture = ExtResource("1_f3sb7")
@@ -64,6 +64,12 @@ custom_data_layer_0/name = "Orientation"
 custom_data_layer_0/type = 4
 sources/0 = SubResource("TileSetAtlasSource_fj7yv")
 
+[sub_resource type="Curve2D" id="Curve2D_dwbse"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 608, 433, 0, 0, 0, 0, 810, 430, 0, 0, 0, 0, 813, 404, 0, 0, 0, 0, 783, 398, 0, 0, 0, 0, 782, 369, 0, 0, 0, 0, 911, 367, 0, 0, 0, 0, 910, 207, 0, 0, 0, 0, 877, 207, 0, 0, 0, 0, 878, 270, 0, 0, 0, 0, 815, 267, 0, 0, 0, 0, 808, 238, 0, 0, 0, 0, 785, 242, 0, 0, 0, 0, 781, 304, 0, 0, 0, 0, 755, 303, 0, 0, 0, 0, 742, 271, 0, 0, 0, 0, 650, 271, 0, 0, 0, 0, 651, 145, 0, 0, 0, 0, 555, 146, 0, 0, 0, 0, 556, 270, 0, 0, 0, 0, 465, 273, 0, 0, 0, 0, 466, 427, 0, 0, 0, 0, 608, 433)
+}
+point_count = 22
+
 [node name="World" type="Node2D"]
 script = ExtResource("1_fj7yv")
 
@@ -88,3 +94,4 @@ texture = ExtResource("3_tlwt5")
 
 [node name="Path2D" type="Path2D" parent="."]
 position = Vector2(1, 0)
+curve = SubResource("Curve2D_dwbse")
