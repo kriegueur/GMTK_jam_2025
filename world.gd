@@ -148,8 +148,6 @@ func find_rail_orientation(tile : Vector2i) -> ORIENTATION:
 	var adjacents : Array[ADJACENTPOS] = find_adjacents(tile)
 	if len(adjacents) == 0:
 		return ORIENTATION.NS
-	if len(adjacents) > 2:
-		return get_tile_orientation(tile)
 	if len(adjacents) == 1:
 		match adjacents[0]:
 			ADJACENTPOS.UP:
@@ -160,6 +158,16 @@ func find_rail_orientation(tile : Vector2i) -> ORIENTATION:
 				return ORIENTATION.WE
 			ADJACENTPOS.RIGHT:
 				return ORIENTATION.WE
+	if len(adjacents) > 2:
+		if ADJACENTPOS.UP not in adjacents:
+			return ORIENTATION.WE
+		if ADJACENTPOS.DOWN not in adjacents:
+			return ORIENTATION.WE
+		if ADJACENTPOS.LEFT not in adjacents:
+			return ORIENTATION.NS
+		if ADJACENTPOS.RIGHT not in adjacents:
+			return ORIENTATION.NS
+		return get_tile_orientation(tile)
 	match adjacents[0]:
 		ADJACENTPOS.UP:
 			if adjacents[1] == ADJACENTPOS.DOWN:
