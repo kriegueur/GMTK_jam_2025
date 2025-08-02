@@ -4,10 +4,48 @@ extends Node2D
 @onready var factory: Sprite2D = $Factory
 @onready var tile_map_layer: TileMapLayer = $TileMapLayer
 
+var train_scene = preload("res://scenes/train.tscn")
+var client_scene = preload("res://scenes/client.tscn")
+var train: Train
+var clients: Array[Client] = []
+var total_currency: int = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var path = find_railpath()
 	path_2d.curve = _curve2d_from_path(path)
+	
+	setup_train()
+	setup_clients()
+
+func setup_train():
+	train = train_scene.instantiate()
+	path_2d.add_child(train)
+	train.money_collected.connect(_on_money_collected)
+	train.reached_factory.connect(_on_train_reached_factory)
+
+# à revoir pour faire un spawn aléatoire sur la map en fonction du tiling.
+# fait en sorte de spawn les clients sur les rails
+func setup_clients():
+	var path_points = path_2d.curve.get_baked_points()
+	var num_clients = 3
+	for i in range(num_clients):
+		var client: Client = client_scene.instantiate()
+		add_child(client)
+		var point_index = (i + 1) * (path_points.size() / (num_clients + 1))
+		if point_index < path_points.size():
+			var rail_pos = path_points[point_index]
+			client.global_position = rail_pos
+		client.money_value = randi_range(5, 20)
+		client.update_display()
+		clients.append(client)
+
+func _on_money_collected(amount: int):
+	total_currency += amount
+	print("Ce client a apporté : ", total_currency, " $")
+
+func _on_train_reached_factory():
+	print("Ton tour a apporté un total de : ", total_currency, " $")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
