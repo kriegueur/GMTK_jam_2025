@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=4 uid="uid://1wl7iiad1nhn"]
+[gd_scene load_steps=7 format=4 uid="uid://1wl7iiad1nhn"]
 
 [ext_resource type="Texture2D" uid="uid://c4bxeg3u7sjpi" path="res://rails.png" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://b82hcokisgbkl" path="res://world.gd" id="1_fj7yv"]
@@ -64,14 +64,18 @@ custom_data_layer_0/name = "Orientation"
 custom_data_layer_0/type = 4
 sources/0 = SubResource("TileSetAtlasSource_fj7yv")
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_tlwt5"]
+atlas = ExtResource("1_f3sb7")
+region = Rect2(0, 0, 32, 32)
+
 [node name="World" type="Node2D"]
 script = ExtResource("1_fj7yv")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-offset_left = 30.0
-offset_top = 8.0
-offset_right = 1240.0
-offset_bottom = 741.0
+offset_left = -12.0
+offset_top = -17.0
+offset_right = 1198.0
+offset_bottom = 716.0
 color = Color(0.285669, 0.464626, 6.73831e-07, 1)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
@@ -88,3 +92,8 @@ texture = ExtResource("3_tlwt5")
 
 [node name="Path2D" type="Path2D" parent="."]
 position = Vector2(1, 0)
+
+[node name="PlacementIndicator" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.541176)
+z_index = 5
+texture = SubResource("AtlasTexture_tlwt5")

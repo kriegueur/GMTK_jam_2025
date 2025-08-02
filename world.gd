@@ -3,6 +3,7 @@ extends Node2D
 @onready var path_2d: Path2D = $Path2D
 @onready var factory: Sprite2D = $Factory
 @onready var tile_map_layer: TileMapLayer = $TileMapLayer
+@onready var placement_indicator: Sprite2D = $PlacementIndicator
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -11,7 +12,13 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	var mouse_position := get_global_mouse_position()
+	var cursor_tile := tile_map_layer.local_to_map(to_local(mouse_position))
+	var cursor_tile_center := tile_map_layer.map_to_local(cursor_tile)
+	placement_indicator.global_position = cursor_tile_center
+	if Input.is_action_pressed("click"):
+		if tile_empty(cursor_tile):
+			tile_map_layer.set_cell(cursor_tile, 0, Vector2i(0,0))
 
 func get_tile_center_from_pos(pos : Vector2) -> Vector2:
 	var a = tile_map_layer.local_to_map(pos)
@@ -78,3 +85,6 @@ func _curve2d_from_path(path : Array[Vector2i]) -> Curve2D:
 				curve.add_point(tile_map_layer.map_to_local(tile))
 	curve.add_point(tile_map_layer.map_to_local(path[-1]))
 	return curve
+
+func tile_empty(tile : Vector2i) -> bool:
+	return tile_map_layer.get_cell_source_id(tile) == -1
