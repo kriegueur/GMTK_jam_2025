@@ -5,6 +5,22 @@ extends Node2D
 @onready var tile_map_layer: TileMapLayer = $TileMapLayer
 @onready var placement_indicator: Sprite2D = $PlacementIndicator
 
+enum ORIENTATION {
+	WE,
+	NS,
+	NW,
+	NE,
+	SW,
+	SE,
+}
+
+enum ADJACENTPOS {
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT,
+}
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var path = find_railpath()
@@ -18,7 +34,7 @@ func _process(delta: float) -> void:
 	placement_indicator.global_position = cursor_tile_center
 	if Input.is_action_pressed("click"):
 		if tile_empty(cursor_tile):
-			tile_map_layer.set_cell(cursor_tile, 0, Vector2i(0,0))
+			place_rail(cursor_tile)
 
 func get_tile_center_from_pos(pos : Vector2) -> Vector2:
 	var a = tile_map_layer.local_to_map(pos)
@@ -88,3 +104,113 @@ func _curve2d_from_path(path : Array[Vector2i]) -> Curve2D:
 
 func tile_empty(tile : Vector2i) -> bool:
 	return tile_map_layer.get_cell_source_id(tile) == -1
+
+func place_rail(tile : Vector2i):
+	var orientation := find_rail_orientation(tile)
+	var atlas_coords := orientation_to_atlas(orientation)
+	tile_map_layer.set_cell(tile, 0, atlas_coords)
+	update_tile(tile + Vector2i.UP)
+	update_tile(tile + Vector2i.DOWN)
+	update_tile(tile + Vector2i.LEFT)
+	update_tile(tile + Vector2i.RIGHT)
+
+func orientation_to_atlas(orientation : ORIENTATION) -> Vector2i:
+	match orientation:
+		ORIENTATION.WE:
+			return Vector2i(1,0)
+		ORIENTATION.NS:
+			return Vector2i(0,0)
+		ORIENTATION.NW:
+			return Vector2i(2,1)
+		ORIENTATION.NE:
+			return Vector2i(1,1)
+		ORIENTATION.SW:
+			return Vector2i(2,0)
+		ORIENTATION.SE:
+			return Vector2i(0,1)
+		_:
+			return Vector2i(0,0)
+
+func find_adjacents(tile : Vector2i) -> Array[ADJACENTPOS]:
+	var adjacents : Array[ADJACENTPOS] = []
+	if !tile_empty(tile + Vector2i.DOWN):
+		adjacents.append(ADJACENTPOS.DOWN)
+	if !tile_empty(tile + Vector2i.UP):
+		adjacents.append(ADJACENTPOS.UP)
+	if !tile_empty(tile + Vector2i.LEFT):
+		adjacents.append(ADJACENTPOS.LEFT)
+	if !tile_empty(tile + Vector2i.RIGHT):
+		adjacents.append(ADJACENTPOS.RIGHT)
+	
+	return adjacents
+
+func find_rail_orientation(tile : Vector2i) -> ORIENTATION:
+	var adjacents : Array[ADJACENTPOS] = find_adjacents(tile)
+	if len(adjacents) == 0:
+		return ORIENTATION.NS
+	if len(adjacents) > 2:
+		return get_tile_orientation(tile)
+	if len(adjacents) == 1:
+		match adjacents[0]:
+			ADJACENTPOS.UP:
+				return ORIENTATION.NS
+			ADJACENTPOS.DOWN:
+				return ORIENTATION.NS
+			ADJACENTPOS.LEFT:
+				return ORIENTATION.WE
+			ADJACENTPOS.RIGHT:
+				return ORIENTATION.WE
+	match adjacents[0]:
+		ADJACENTPOS.UP:
+			if adjacents[1] == ADJACENTPOS.DOWN:
+				return ORIENTATION.NS
+			if adjacents[1] == ADJACENTPOS.RIGHT:
+				return ORIENTATION.NE
+			return ORIENTATION.NW
+		ADJACENTPOS.DOWN:
+			if adjacents[1] == ADJACENTPOS.UP:
+				return ORIENTATION.NS
+			if adjacents[1] == ADJACENTPOS.RIGHT:
+				return ORIENTATION.SE
+			return ORIENTATION.SW
+		ADJACENTPOS.LEFT:
+			if adjacents[1] == ADJACENTPOS.RIGHT:
+				return ORIENTATION.WE
+			if adjacents[1] == ADJACENTPOS.UP:
+				return ORIENTATION.NW
+			return ORIENTATION.SW
+		ADJACENTPOS.RIGHT:
+			if adjacents[1] == ADJACENTPOS.LEFT:
+				return ORIENTATION.WE
+			if adjacents[1] == ADJACENTPOS.UP:
+				return ORIENTATION.NE
+			return ORIENTATION.SE
+		_:
+			return ORIENTATION.NS
+
+func update_tile(tile : Vector2i):
+	if tile_empty(tile):
+		return
+	var orientation := find_rail_orientation(tile)
+	var atlas_coords := orientation_to_atlas(orientation)
+	tile_map_layer.set_cell(tile, 0, atlas_coords)
+
+func get_tile_orientation(tile : Vector2i) -> ORIENTATION:
+	if tile_empty(tile):
+		return ORIENTATION.NS
+	var tile_type : String = tile_map_layer.get_cell_tile_data(tile).get_custom_data("Orientation")
+	match tile_type:
+		"WE":
+			return ORIENTATION.WE
+		"NS":
+			return ORIENTATION.NS
+		"NW":
+			return ORIENTATION.NW
+		"NE":
+			return ORIENTATION.NE
+		"SW":
+			return ORIENTATION.SW
+		"SE":
+			return ORIENTATION.SE
+		_:
+			return ORIENTATION.NS
