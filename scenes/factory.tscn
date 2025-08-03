@@ -19,14 +19,14 @@ particles_anim_loop = false
 offsets = PackedFloat32Array(0, 0.967742, 0.975806, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0.474575, 0.474575, 0.474575, 0.305785, 0.243137, 0.243137, 0.243137, 0, 0, 0, 0, 0)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_muh0j"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1adwy"]
 gradient = SubResource("Gradient_k2tyu")
 
 [sub_resource type="Curve" id="Curve_6h0me"]
 _data = [Vector2(0, 0.573034), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_muh0j"]
+[sub_resource type="CurveTexture" id="CurveTexture_quloc"]
 curve = SubResource("Curve_6h0me")
 
 [sub_resource type="Curve" id="Curve_ayg0a"]
@@ -34,7 +34,7 @@ _limits = [0.0, 3.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_fr42t"]
+[sub_resource type="CurveTexture" id="CurveTexture_k2tyu"]
 curve = SubResource("Curve_ayg0a")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5g2so"]
@@ -44,12 +44,17 @@ emission_shape_offset = Vector3(0, 1, 1)
 emission_shape_scale = Vector3(3, 3, 3)
 emission_shape = 3
 emission_box_extents = Vector3(1, 1, 1)
-gravity = Vector3(-20, 0, 0)
+velocity_pivot = Vector3(10, 10, 0)
+direction = Vector3(-10, -10, 0)
+spread = 33.0
+flatness = 0.055
+initial_velocity_max = 329.79
+gravity = Vector3(-20, 10, 0)
 scale_min = 0.2
 scale_max = 0.7
-scale_curve = SubResource("CurveTexture_muh0j")
-scale_over_velocity_curve = SubResource("CurveTexture_fr42t")
-color_ramp = SubResource("GradientTexture1D_muh0j")
+scale_curve = SubResource("CurveTexture_quloc")
+scale_over_velocity_curve = SubResource("CurveTexture_k2tyu")
+color_ramp = SubResource("GradientTexture1D_1adwy")
 anim_offset_max = 1.0
 turbulence_enabled = true
 turbulence_noise_strength = 4.75
@@ -102,16 +107,16 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 60
 text = "START TRAIN"
 
-[node name="GPUParticles2D2" type="GPUParticles2D" parent="."]
+[node name="GPUParticles2D3" type="GPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_quloc")
-position = Vector2(2, -70)
-amount = 50
+position = Vector2(-30, -53.3333)
+amount = 20
 texture = ExtResource("3_1adwy")
 process_material = SubResource("ParticleProcessMaterial_5g2so")
 
-[node name="GPUParticles2D2" type="GPUParticles2D" parent="GPUParticles2D2"]
+[node name="GPUParticles2D4" type="GPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_quloc")
-position = Vector2(-32, 16.6667)
+position = Vector2(2, -63.3333)
 amount = 20
 texture = ExtResource("3_1adwy")
 process_material = SubResource("ParticleProcessMaterial_5g2so")

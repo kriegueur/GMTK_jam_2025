@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://6g5l5k316j8y"]
+[gd_scene load_steps=15 format=3 uid="uid://6g5l5k316j8y"]
 
 [ext_resource type="Script" uid="uid://dp5rx80hpjara" path="res://scripts/train.gd" id="1_d43s7"]
 [ext_resource type="Texture2D" uid="uid://ct45q86ryyh2w" path="res://assets/train.png" id="2_d43s7"]
@@ -12,9 +12,55 @@ size = Vector2(33, 19)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6b7q7"]
 bg_color = Color(0, 0, 0, 1)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_muh0j"]
+particles_animation = true
+particles_anim_h_frames = 2
+particles_anim_v_frames = 3
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id="Gradient_o1hdh"]
+offsets = PackedFloat32Array(0, 0.967742, 0.975806, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.474575, 0.474575, 0.474575, 0.305785, 0.243137, 0.243137, 0.243137, 0, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_muh0j"]
+gradient = SubResource("Gradient_o1hdh")
+
+[sub_resource type="Curve" id="Curve_fr42t"]
+_data = [Vector2(0, 0.573034), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_muh0j"]
+curve = SubResource("Curve_fr42t")
+
+[sub_resource type="Curve" id="Curve_xwl36"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_fr42t"]
+curve = SubResource("Curve_xwl36")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_flq6t"]
+lifetime_randomness = 0.45
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(0, 1, 1)
+emission_shape_scale = Vector3(3, 3, 3)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+spread = 33.0
+flatness = 0.055
+gravity = Vector3(-20, 10, 0)
+scale_min = 0.2
+scale_max = 0.7
+scale_curve = SubResource("CurveTexture_muh0j")
+scale_over_velocity_curve = SubResource("CurveTexture_fr42t")
+color_ramp = SubResource("GradientTexture1D_muh0j")
+anim_offset_max = 1.0
+turbulence_enabled = true
+turbulence_noise_strength = 4.75
+turbulence_noise_scale = 11.01
 
 [node name="Train" type="PathFollow2D"]
-visible = false
 loop = false
 script = ExtResource("1_d43s7")
 
@@ -44,3 +90,10 @@ grow_vertical = 0
 theme_override_styles/background = SubResource("StyleBoxFlat_d43s7")
 theme_override_styles/fill = SubResource("StyleBoxFlat_6b7q7")
 show_percentage = false
+
+[node name="GPUParticles2D3" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_muh0j")
+position = Vector2(15, 0)
+amount = 50
+texture = ExtResource("3_6b7q7")
+process_material = SubResource("ParticleProcessMaterial_flq6t")
