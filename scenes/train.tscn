@@ -1,7 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://6g5l5k316j8y"]
 
 [ext_resource type="Script" uid="uid://dp5rx80hpjara" path="res://scripts/train.gd" id="1_d43s7"]
-[ext_resource type="Texture2D" uid="uid://caal8sncexj16" path="res://icon.svg" id="2_6b7q7"]
+[ext_resource type="Texture2D" uid="uid://ct45q86ryyh2w" path="res://assets/train.png" id="2_d43s7"]
+[ext_resource type="Texture2D" uid="uid://qssiutp06mah" path="res://assets/clouds.png" id="3_6b7q7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_muh0j"]
 size = Vector2(33, 19)
@@ -11,6 +12,7 @@ size = Vector2(33, 19)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6b7q7"]
 bg_color = Color(0, 0, 0, 1)
 
+
 [node name="Train" type="PathFollow2D"]
 visible = false
 loop = false
@@ -19,8 +21,7 @@ script = ExtResource("1_d43s7")
 [node name="TrainBody" type="Area2D" parent="."]
 
 [node name="TrainSprite" type="Sprite2D" parent="TrainBody"]
-scale = Vector2(0.5, 0.3)
-texture = ExtResource("2_6b7q7")
+texture = ExtResource("2_d43s7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TrainBody"]
 shape = SubResource("RectangleShape2D_muh0j")
