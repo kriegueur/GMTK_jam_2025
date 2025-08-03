@@ -1,14 +1,16 @@
 extends Area2D
 class_name Client
 
-@export var money_value: int = 10
-@export var is_collected: bool = false
-@export var demand : float = 20.0
+var money_value: int = 10
+var is_collected: bool = false
+var demand : float = 20.0
+var upgrade_price := 10
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var label: Label = $Label
 @onready var audio_player: AudioStreamPlayer = $AudioStreamPlayer
 @onready var progress_bar: ProgressBar = $ProgressBar
+@onready var button: Button = $Button
 
 var original_modulate: Color
 
@@ -16,7 +18,7 @@ const DOWNTIME := 10.0
 var downtime_elapsed := 0.0
 
 signal client_reached(client: Client)
-
+signal client_upgrading
 
 func _ready():
 	area_entered.connect(_on_area_entered)
@@ -24,6 +26,9 @@ func _ready():
 	update_display()
 	progress_bar.max_value = DOWNTIME
 	progress_bar.hide()
+	button.connect("pressed", func():
+		client_upgrading.emit()
+	)
 
 func _process(delta: float) -> void:
 	if is_collected:
@@ -69,3 +74,13 @@ func update_display():
 func reset_client():
 	is_collected = false
 	update_display()
+
+func upgrade() -> int:
+	const PRICE_INCREASE = 1.1
+	const MONEY_INCREASE = 5
+	const DEMAND_INCREASE = 10
+	money_value += MONEY_INCREASE
+	upgrade_price *= PRICE_INCREASE
+	update_display()
+	demand += DEMAND_INCREASE
+	return upgrade_price
