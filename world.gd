@@ -8,6 +8,7 @@ extends Node2D
 @onready var add_button: Button = $UI/HBoxContainer/Add
 @onready var erase_button: Button = $UI/HBoxContainer/Erase
 @onready var h_box_container: HBoxContainer = $UI/HBoxContainer
+@onready var upgrade_pannel: UpgradePanel = $UI/UpgradePannel
 
 
 enum ORIENTATION {
@@ -63,6 +64,8 @@ func _ready() -> void:
 				erase_button.disabled = true
 			add_button.show()
 			erase_button.show()
+			train.is_stopped = true
+			factory.stopped = true
 		elif state == GAMESTATE.EDITING:
 			path = find_railpath()
 			if path.is_empty():
@@ -73,6 +76,8 @@ func _ready() -> void:
 			placement_indicator.hide()
 			add_button.hide()
 			erase_button.hide()
+			train.is_stopped = false
+			factory.stopped = false
 	)
 	add_button.connect("pressed", func():
 		editstate = EDITSTATE.RAIL
@@ -97,6 +102,13 @@ func _ready() -> void:
 		var taken := train.leave_factory(available)
 		factory.storage -= taken
 	)
+	factory.connect("select_factory", func():
+		if state == GAMESTATE.PLAYING:
+			upgrade_pannel.upgrade_factory()
+	)
+	MoneyState.connect("money_changed", func():
+		$UI/MoneyDisplay.text = str(MoneyState.money) + '$'
+	)
 	
 	setup_train()
 	setup_clients()
@@ -104,12 +116,13 @@ func _ready() -> void:
 func setup_train():
 	train = train_scene.instantiate()
 	path_2d.add_child(train)
+	upgrade_pannel.train = train
 	train.money_collected.connect(_on_money_collected)
-	train.reached_factory.connect(_on_train_reached_factory)
 
 # à revoir pour faire un spawn aléatoire sur la map en fonction du tiling.
 # fait en sorte de spawn les clients sur les rails
 func setup_clients():
+	"""
 	var path_points = path_2d.curve.get_baked_points()
 	var num_clients = 3
 	for i in range(num_clients):
@@ -122,13 +135,16 @@ func setup_clients():
 		client.money_value = randi_range(5, 20)
 		client.update_display()
 		clients.append(client)
+	"""
+	for client : Client in get_tree().get_nodes_in_group("client"):
+		client.connect("client_upgrading", func():
+			if state == GAMESTATE.PLAYING:
+				upgrade_pannel.upgrade_client(client)
+		)
 
 func _on_money_collected(amount: int):
 	total_currency += amount
 	print("Ce client a apporté : ", total_currency, " $")
-
-func _on_train_reached_factory():
-	print("Ton tour a apporté un total de : ", total_currency, " $")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

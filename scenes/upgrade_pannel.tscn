@@ -1,0 +1,138 @@
+[gd_scene load_steps=4 format=3 uid="uid://b0fcxgd6mkxw1"]
+
+[ext_resource type="Texture2D" uid="uid://dg8j6foa2lc5w" path="res://assets/close_upgrade.png" id="1_r78id"]
+[ext_resource type="Script" uid="uid://cayxnrhv3v2lf" path="res://scripts/upgrade_pannel.gd" id="1_xlvg1"]
+[ext_resource type="Theme" uid="uid://vd0yfnwcwmfs" path="res://upgrade_theme.tres" id="3_lvx5l"]
+
+[node name="UpgradePannel" type="Control"]
+z_index = -1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 809.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xlvg1")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -344.0
+grow_horizontal = 0
+grow_vertical = 2
+color = Color(0.766646, 0, 0.188857, 0.490196)
+
+[node name="TextureButton" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -359.0
+offset_top = -16.0
+offset_right = -327.0
+offset_bottom = 16.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(3, 3)
+pivot_offset = Vector2(16, 16)
+texture_normal = ExtResource("1_r78id")
+
+[node name="Empty" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 24.0
+offset_right = 323.0
+offset_bottom = 201.0
+
+[node name="Label" type="Label" parent="Empty"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Select a Factory or client to upgrade it"
+autowrap_mode = 2
+
+[node name="Client" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 30.0
+offset_top = 24.0
+offset_right = 308.0
+offset_bottom = 74.0
+theme = ExtResource("3_lvx5l")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Client"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Client/HBoxContainer"]
+layout_mode = 2
+text = "UPGRADE"
+
+[node name="Label" type="Label" parent="Client/HBoxContainer"]
+layout_mode = 2
+text = "10$"
+
+[node name="Factory" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 30.0
+offset_top = 24.0
+offset_right = 308.0
+offset_bottom = 446.0
+theme = ExtResource("3_lvx5l")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Factory"]
+layout_mode = 2
+
+[node name="Production" type="Button" parent="Factory/HBoxContainer2"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "UPGRADE PRODUCTION"
+autowrap_mode = 2
+
+[node name="Label" type="Label" parent="Factory/HBoxContainer2"]
+layout_mode = 2
+text = "10$"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Factory"]
+layout_mode = 2
+
+[node name="Capacity" type="Button" parent="Factory/HBoxContainer3"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "UPGRADE CAPACITY"
+autowrap_mode = 2
+
+[node name="Label" type="Label" parent="Factory/HBoxContainer3"]
+layout_mode = 2
+text = "10$"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Factory"]
+layout_mode = 2
+
+[node name="TSpeed" type="Button" parent="Factory/HBoxContainer4"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "UPGRADE TRAIN SPEED"
+autowrap_mode = 2
+
+[node name="Label" type="Label" parent="Factory/HBoxContainer4"]
+layout_mode = 2
+text = "10$"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="Factory"]
+layout_mode = 2
+
+[node name="TCapacity" type="Button" parent="Factory/HBoxContainer5"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "UPGRADE TRAIN CAPACITY"
+autowrap_mode = 2
+
+[node name="Label" type="Label" parent="Factory/HBoxContainer5"]
+layout_mode = 2
+text = "10$"

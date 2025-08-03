@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://6g5l5k316j8y"]
+[gd_scene load_steps=6 format=3 uid="uid://6g5l5k316j8y"]
 
 [ext_resource type="Script" uid="uid://dp5rx80hpjara" path="res://scripts/train.gd" id="1_d43s7"]
 [ext_resource type="Texture2D" uid="uid://caal8sncexj16" path="res://icon.svg" id="2_6b7q7"]
@@ -6,10 +6,15 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_muh0j"]
 size = Vector2(33, 19)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d43s7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6b7q7"]
+bg_color = Color(0, 0, 0, 1)
+
 [node name="Train" type="PathFollow2D"]
+visible = false
 loop = false
 script = ExtResource("1_d43s7")
-speed = 400.0
 
 [node name="TrainBody" type="Area2D" parent="."]
 
@@ -22,3 +27,19 @@ shape = SubResource("RectangleShape2D_muh0j")
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = 22.0
+offset_right = 28.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_d43s7")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6b7q7")
+show_percentage = false

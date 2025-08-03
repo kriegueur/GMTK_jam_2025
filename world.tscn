@@ -1,8 +1,11 @@
-[gd_scene load_steps=7 format=4 uid="uid://1wl7iiad1nhn"]
+[gd_scene load_steps=10 format=4 uid="uid://1wl7iiad1nhn"]
 
 [ext_resource type="Texture2D" uid="uid://c4bxeg3u7sjpi" path="res://rails.png" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://b82hcokisgbkl" path="res://world.gd" id="1_fj7yv"]
+[ext_resource type="Texture2D" uid="uid://bgyendjsuo5w7" path="res://assets/Pixel_art_grass_image.png" id="2_036b0"]
 [ext_resource type="PackedScene" uid="uid://jsw8v313wdip" path="res://scenes/factory.tscn" id="3_tlwt5"]
+[ext_resource type="PackedScene" uid="uid://b0fcxgd6mkxw1" path="res://scenes/upgrade_pannel.tscn" id="4_aqk2v"]
+[ext_resource type="PackedScene" uid="uid://c6rf42ct37t37" path="res://scenes/client.tscn" id="6_dwbse"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fj7yv"]
 texture = ExtResource("1_f3sb7")
@@ -71,7 +74,17 @@ region = Rect2(0, 0, 32, 32)
 [node name="World" type="Node2D"]
 script = ExtResource("1_fj7yv")
 
+[node name="TextureRect" type="TextureRect" parent="."]
+texture_repeat = 2
+offset_left = -12.0
+offset_top = -17.0
+offset_right = 1234.0
+offset_bottom = 692.0
+texture = ExtResource("2_036b0")
+stretch_mode = 1
+
 [node name="ColorRect" type="ColorRect" parent="."]
+visible = false
 offset_left = -12.0
 offset_top = -17.0
 offset_right = 1198.0
@@ -84,6 +97,7 @@ tile_map_data = PackedByteArray("AAAPAA0AAAABAAAAAAAQAA0AAAABAAAAAAARAA0AAAABAAA
 tile_set = SubResource("TileSet_tlwt5")
 
 [node name="Factory" parent="." instance=ExtResource("3_tlwt5")]
+z_as_relative = false
 position = Vector2(607, 432)
 
 [node name="Path2D" type="Path2D" parent="."]
@@ -96,6 +110,9 @@ z_index = 5
 texture = SubResource("AtlasTexture_tlwt5")
 
 [node name="UI" type="CanvasLayer" parent="."]
+
+[node name="UpgradePannel" parent="UI" node_paths=PackedStringArray("factory") instance=ExtResource("4_aqk2v")]
+factory = NodePath("../../Factory")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI"]
 anchors_preset = 7
@@ -122,3 +139,59 @@ text = "ADD"
 visible = false
 layout_mode = 2
 text = "ERASE"
+
+[node name="MoneyDisplay" type="Label" parent="UI"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 60
+text = "0$"
+horizontal_alignment = 1
+
+[node name="Clients" type="Node2D" parent="."]
+
+[node name="Client" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(752, 366)
+
+[node name="Client14" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(1014, 290)
+
+[node name="Client2" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(627, 271)
+
+[node name="Client13" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(962, 445)
+
+[node name="Client3" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(371, 352)
+
+[node name="Client4" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(400, 503)
+
+[node name="Client5" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(177, 523)
+
+[node name="Client6" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(139, 356)
+
+[node name="Client7" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(177, 176)
+
+[node name="Client8" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(304, 60)
+
+[node name="Client9" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(484, 145)
+
+[node name="Client12" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(851, 552)
+
+[node name="Client10" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(746, 67)
+
+[node name="Client11" parent="Clients" instance=ExtResource("6_dwbse")]
+position = Vector2(925, 169)

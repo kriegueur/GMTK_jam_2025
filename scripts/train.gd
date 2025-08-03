@@ -2,12 +2,13 @@ extends PathFollow2D
 
 class_name Train
 
-@export var speed: float = 100.0
+var speed: float = 100.0
 @onready var timer: Timer = $Timer
+@onready var progress_bar: ProgressBar = $ProgressBar
 
 var is_stopped: bool = true
 var money: int = 0
-var capacity : float = 50.0
+var capacity : float = 20.0
 var storage : float = 0.0
 
 signal money_collected(amount: int)
@@ -15,12 +16,14 @@ signal reached_factory
 
 func _ready() -> void:
 	progress = 0.0
+	progress_bar.max_value = capacity
 	timer.connect("timeout", func():
 		if progress != 0.0:
 			resume_movement()
 	)
 
 func _process(delta: float) -> void:
+	progress_bar.value = storage
 	if not is_stopped:
 		progress += speed * delta
 		if progress_ratio >= 1.0:
@@ -45,6 +48,7 @@ func resume_movement():
 
 func leave_factory(available : float) -> float:
 	if progress == 0.0:
+		show()
 		var empty_storage = capacity - storage
 		var taken = min(available, empty_storage)
 		storage += taken
@@ -55,6 +59,16 @@ func leave_factory(available : float) -> float:
 
 func stop_at_factory():
 	is_stopped = true
-	reached_factory.emit()
+	hide()
+	MoneyState.gain(money)
+	reached_factory.emit(money)
+	money = 0.0
 	progress_ratio = 0.0
 	print("Train arrivé à la factory avec ", money, " pièces!")
+
+func upgrade_speed():
+	speed += 20.0
+
+func upgrade_capacity():
+	capacity += 10.0
+	progress_bar.max_value = capacity
