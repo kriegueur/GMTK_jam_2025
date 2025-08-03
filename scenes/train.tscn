@@ -61,6 +61,7 @@ turbulence_noise_strength = 4.75
 turbulence_noise_scale = 11.01
 
 [node name="Train" type="PathFollow2D"]
+visible = false
 loop = false
 script = ExtResource("1_d43s7")
 

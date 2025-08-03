@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c6rf42ct37t37"]
 
 [ext_resource type="Script" uid="uid://60wpyfyeu8fm" path="res://scripts/client.gd" id="1_5f806"]
-[ext_resource type="Texture2D" uid="uid://caal8sncexj16" path="res://icon.svg" id="2_1t5vp"]
+[ext_resource type="Texture2D" uid="uid://d11l06j0yytl7" path="res://assets/House.png" id="2_4tr0r"]
 [ext_resource type="AudioStream" uid="uid://tsy6o10ol5td" path="res://assets/Money_pick.wav" id="3_4tr0r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4tr0r"]
@@ -19,9 +19,7 @@ text = "10$"
 horizontal_alignment = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-self_modulate = Color(1, 0, 0, 1)
-scale = Vector2(0.3, 0.3)
-texture = ExtResource("2_1t5vp")
+texture = ExtResource("2_4tr0r")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_4tr0r")

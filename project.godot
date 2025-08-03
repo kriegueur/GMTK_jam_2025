@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 MoneyState="*res://scripts/money_state.gd"
 
+[display]
+
+window/stretch/mode="viewport"
+
 [input]
 
 start_train={
